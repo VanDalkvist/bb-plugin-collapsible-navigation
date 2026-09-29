@@ -254,139 +254,157 @@ function CollapsibleSidebarNavigation({
 
   return (
     <nav aria-label="Sidebar navigation" className="flex flex-col w-full">
-      {/* Header bar: clicking anywhere on the header toggles collapse/expand */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={toggleCollapsed}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            toggleCollapsed();
-          }
-        }}
-        title={
-          isCollapsed
-            ? "Развернуть навигацию (Expand navigation)"
-            : "Свернуть навигацию наверх (Collapse navigation upward)"
-        }
-        aria-expanded={!isCollapsed}
-        className="flex items-center justify-between px-2 h-7 select-none cursor-pointer group text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <div className="flex items-center gap-1.5">
-          <ChevronIcon expanded={!isCollapsed} />
-          <span className="text-xs font-medium tracking-tight">Navigation</span>
-          <span className="text-[11px] text-muted-foreground/60 font-normal">
-            ({visibleItems.length})
-          </span>
-        </div>
-
-        {/* Customize button in expanded state only */}
-        {!isCollapsed && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              actions.openCustomize();
-            }}
-            title="Настроить порядок и видимость элементов (Customize sidebar)"
-            aria-label="Customize navigation"
-            className="size-5 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent opacity-60 group-hover:opacity-100 transition-opacity cursor-pointer"
-          >
-            <CustomizeIcon />
-          </button>
-        )}
-      </div>
-
-      {/* When Collapsed: show ALL pinned (visible) item icons in a compact strip */}
+      {/* When Collapsed: ONE SINGLE LINE (h-7) with Navigation title on left and non-wrapping icons on right */}
       {isCollapsed ? (
-        <div
-          className="flex flex-wrap items-center gap-1 px-2 pt-1 pb-1"
-          role="toolbar"
-          aria-label="Collapsed navigation icons"
-        >
-          {visibleItems.map((item) => (
-            <CollapsedQuickButton
-              key={item.id}
-              item={item}
-              active={item.id === activeItemId}
-              onActivate={handleActivate}
-            />
-          ))}
+        <div className="flex items-center justify-between gap-1 px-2 h-7 select-none overflow-hidden flex-nowrap w-full">
+          {/* Header toggler */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={toggleCollapsed}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleCollapsed();
+              }
+            }}
+            title="Развернуть навигацию (Expand navigation)"
+            aria-expanded={false}
+            className="flex items-center gap-1.5 shrink-0 cursor-pointer text-xs font-medium text-muted-foreground hover:text-foreground transition-colors py-1"
+          >
+            <ChevronIcon expanded={false} />
+            <span className="text-xs font-medium tracking-tight">Navigation</span>
+          </div>
+
+          {/* Single-row icon strip for all pinned items — no wrapping, hides what doesn't fit */}
+          <div
+            className="flex items-center gap-0.5 min-w-0 overflow-hidden flex-nowrap justify-end shrink"
+            role="toolbar"
+            aria-label="Pinned navigation icons"
+          >
+            {visibleItems.map((item) => (
+              <CollapsedQuickButton
+                key={item.id}
+                item={item}
+                active={item.id === activeItemId}
+                onActivate={handleActivate}
+              />
+            ))}
+          </div>
         </div>
       ) : (
-        /* When Expanded: show full rows with labels */
-        <div className="flex flex-col gap-0.5 px-2 pt-1">
-          {visibleItems.map((item) => (
-            <SidebarNavItemRow
-              key={item.id}
-              item={item}
-              active={item.id === activeItemId}
-              isShortcutModifierHeld={isShortcutModifierHeld}
-              onActivate={handleActivate}
-            />
-          ))}
-
-          {/* Hidden items overflow drawer */}
-          {hiddenItems.length > 0 && (
-            <div className="mt-1 pt-1 border-t border-sidebar-border/20">
-              <button
-                type="button"
-                onClick={() => setShowHiddenSection((prev) => !prev)}
-                title="Показать скрытые элементы"
-                className="w-full flex items-center justify-between px-2 h-6 text-xs text-muted-foreground hover:text-foreground rounded hover:bg-sidebar-accent transition-colors cursor-pointer"
-              >
-                <span className="flex items-center gap-1.5">
-                  <ChevronIcon expanded={showHiddenSection} />
-                  <span>Скрытые элементы ({hiddenItems.length})</span>
-                </span>
-                <span className="text-[10px] text-muted-foreground/60">
-                  Ещё
-                </span>
-              </button>
-              {showHiddenSection && (
-                <div className="pt-0.5 flex flex-col gap-0.5">
-                  {hiddenItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center justify-between group rounded hover:bg-sidebar-accent/50 pr-1"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <SidebarNavItemRow
-                          item={item}
-                          active={item.id === activeItemId}
-                          isShortcutModifierHeld={isShortcutModifierHeld}
-                          onActivate={handleActivate}
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => actions.setVisible(item.id, true)}
-                        title={`Вернуть "${item.label}" в основную навигацию`}
-                        aria-label={`Unhide ${item.label}`}
-                        className="size-5 rounded flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
+        /* When Expanded: header on top, then full list of rows */
+        <>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={toggleCollapsed}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleCollapsed();
+              }
+            }}
+            title="Свернуть навигацию наверх (Collapse navigation upward)"
+            aria-expanded={true}
+            className="flex items-center justify-between px-2 h-7 select-none cursor-pointer group text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <div className="flex items-center gap-1.5">
+              <ChevronIcon expanded={true} />
+              <span className="text-xs font-medium tracking-tight">Navigation</span>
+              <span className="text-[11px] text-muted-foreground/60 font-normal">
+                ({visibleItems.length})
+              </span>
             </div>
-          )}
-        </div>
+
+            {/* Customize button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                actions.openCustomize();
+              }}
+              title="Настроить порядок и видимость элементов (Customize sidebar)"
+              aria-label="Customize navigation"
+              className="size-5 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent opacity-60 group-hover:opacity-100 transition-opacity cursor-pointer"
+            >
+              <CustomizeIcon />
+            </button>
+          </div>
+
+          {/* Full rows with labels */}
+          <div className="flex flex-col gap-0.5 px-2 pt-1">
+            {visibleItems.map((item) => (
+              <SidebarNavItemRow
+                key={item.id}
+                item={item}
+                active={item.id === activeItemId}
+                isShortcutModifierHeld={isShortcutModifierHeld}
+                onActivate={handleActivate}
+              />
+            ))}
+
+            {/* Hidden items overflow drawer */}
+            {hiddenItems.length > 0 && (
+              <div className="mt-1 pt-1 border-t border-sidebar-border/20">
+                <button
+                  type="button"
+                  onClick={() => setShowHiddenSection((prev) => !prev)}
+                  title="Показать скрытые элементы"
+                  className="w-full flex items-center justify-between px-2 h-6 text-xs text-muted-foreground hover:text-foreground rounded hover:bg-sidebar-accent transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <ChevronIcon expanded={showHiddenSection} />
+                    <span>Скрытые элементы ({hiddenItems.length})</span>
+                  </span>
+                  <span className="text-[10px] text-muted-foreground/60">
+                    Ещё
+                  </span>
+                </button>
+                {showHiddenSection && (
+                  <div className="pt-0.5 flex flex-col gap-0.5">
+                    {hiddenItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between group rounded hover:bg-sidebar-accent/50 pr-1"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <SidebarNavItemRow
+                            item={item}
+                            active={item.id === activeItemId}
+                            isShortcutModifierHeld={isShortcutModifierHeld}
+                            onActivate={handleActivate}
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => actions.setVisible(item.id, true)}
+                          title={`Вернуть "${item.label}" в основную навигацию`}
+                          aria-label={`Unhide ${item.label}`}
+                          className="size-5 rounded flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </>
       )}
 
       {/* Divider matching native BB divider */}
