@@ -19,6 +19,7 @@ import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/utils";
 
 const COLLAPSED_STORAGE_KEY = "bb:collapsible-nav:collapsed";
+const SidebarNavIcon = experimental_SidebarNavigationIcon;
 
 // Module-level coordination for moving navigation into the window header row
 let inHeader = false;
@@ -105,7 +106,7 @@ function SidebarNavItemRow({
         )}
       >
         <span className="shrink-0 size-4 flex items-center justify-center">
-          <experimental_SidebarNavigationIcon
+          <SidebarNavIcon
             icon={item.icon}
             className={cn(
               "size-4 shrink-0 transition-colors",
@@ -167,10 +168,7 @@ function CollapsedQuickButton({
           : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
       )}
     >
-      <experimental_SidebarNavigationIcon
-        icon={item.icon}
-        className="size-3.5 shrink-0"
-      />
+      <SidebarNavIcon icon={item.icon} className="size-3.5 shrink-0" />
     </button>
   );
 }
@@ -242,10 +240,7 @@ function CollapsibleSidebarNavigation({
           {isCollapsed ? (
             activeItem && (
               <span className="ml-1 inline-flex items-center gap-1 text-[11px] font-normal px-1.5 py-0.2 rounded bg-accent/60 text-foreground max-w-[120px] truncate">
-                <experimental_SidebarNavigationIcon
-                  icon={activeItem.icon}
-                  className="size-3 shrink-0"
-                />
+                <SidebarNavIcon icon={activeItem.icon} className="size-3 shrink-0" />
                 <span className="truncate">{activeItem.label}</span>
               </span>
             )
@@ -411,10 +406,7 @@ function HeaderNavIconButton({
           "opacity-50 cursor-not-allowed pointer-events-none",
       )}
     >
-      <experimental_SidebarNavigationIcon
-        icon={item.icon}
-        className="size-4 shrink-0"
-      />
+      <SidebarNavIcon icon={item.icon} className="size-4 shrink-0" />
     </button>
   );
 }

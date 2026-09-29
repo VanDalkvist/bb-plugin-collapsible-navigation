@@ -30,10 +30,10 @@ export default async function plugin(bb: BbPluginApi) {
       ) {
         await bb.sdk.system.uiPreferences.set({
           key: "sidebar.navigationProvider",
-          value: "bb-plugin-collapsible-navigation/collapsible",
+          value: "collapsible-navigation/collapsible",
           expectedRevision: preferences["sidebar.navigationProvider"]?.revision,
         });
-        bb.log.info("Set sidebar.navigationProvider to bb-plugin-collapsible-navigation/collapsible");
+        bb.log.info("Set sidebar.navigationProvider to collapsible-navigation/collapsible");
       }
     } catch (error) {
       bb.log.warn("Failed to set default navigation provider on install", { error });
