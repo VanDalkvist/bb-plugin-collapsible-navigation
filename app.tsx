@@ -268,7 +268,7 @@ function CollapsibleSidebarNavigation({
                 toggleCollapsed();
               }
             }}
-            title="Развернуть навигацию (Expand navigation)"
+            title="Expand navigation"
             aria-expanded={false}
             className="flex items-center gap-1.5 shrink-0 cursor-pointer text-xs font-medium text-muted-foreground hover:text-foreground transition-colors py-1"
           >
@@ -305,7 +305,7 @@ function CollapsibleSidebarNavigation({
                 toggleCollapsed();
               }
             }}
-            title="Свернуть навигацию наверх (Collapse navigation upward)"
+            title="Collapse navigation upward"
             aria-expanded={true}
             className="flex items-center justify-between px-2 h-7 select-none cursor-pointer group text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
@@ -324,7 +324,7 @@ function CollapsibleSidebarNavigation({
                 e.stopPropagation();
                 actions.openCustomize();
               }}
-              title="Настроить порядок и видимость элементов (Customize sidebar)"
+              title="Customize sidebar navigation"
               aria-label="Customize navigation"
               className="size-5 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-sidebar-accent opacity-60 group-hover:opacity-100 transition-opacity cursor-pointer"
             >
@@ -350,15 +350,15 @@ function CollapsibleSidebarNavigation({
                 <button
                   type="button"
                   onClick={() => setShowHiddenSection((prev) => !prev)}
-                  title="Показать скрытые элементы"
+                  title="Show hidden items"
                   className="w-full flex items-center justify-between px-2 h-6 text-xs text-muted-foreground hover:text-foreground rounded hover:bg-sidebar-accent transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-1.5">
                     <ChevronIcon expanded={showHiddenSection} />
-                    <span>Скрытые элементы ({hiddenItems.length})</span>
+                    <span>Hidden items ({hiddenItems.length})</span>
                   </span>
                   <span className="text-[10px] text-muted-foreground/60">
-                    Ещё
+                    More
                   </span>
                 </button>
                 {showHiddenSection && (
@@ -379,7 +379,7 @@ function CollapsibleSidebarNavigation({
                         <button
                           type="button"
                           onClick={() => actions.setVisible(item.id, true)}
-                          title={`Вернуть "${item.label}" в основную навигацию`}
+                          title={`Unhide "${item.label}"`}
                           aria-label={`Unhide ${item.label}`}
                           className="size-5 rounded flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
                         >
@@ -499,7 +499,7 @@ function SidebarHeaderNavigation({
         <button
           type="button"
           onClick={() => actions.openCustomize()}
-          title={`Ещё элементы (${visibleItems.length - capacity})`}
+          title={`More items (${visibleItems.length - capacity})`}
           style={{ width: controlSize, height: controlSize }}
           className="rounded-md flex items-center justify-center text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent cursor-pointer"
         >

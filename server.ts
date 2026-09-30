@@ -36,7 +36,9 @@ export default async function plugin(bb: BbPluginApi) {
         bb.log.info("Set sidebar.navigationProvider to collapsible-navigation/collapsible");
       }
     } catch (error) {
-      bb.log.warn("Failed to set default navigation provider on install", { error });
+      bb.log.warn(
+        `Failed to set default navigation provider on install: ${String(error)}`,
+      );
     }
   });
 }
