@@ -11,6 +11,14 @@ Reclaim sidebar space with an upward-folding collapsible navigation panel for BB
 - **Header Navigation Slot**: Optional slot to place navigation icons directly beside window controls in the top sidebar header.
 - **Persistent State**: Remembers collapsed/expanded state across restarts in `localStorage`.
 
+## Screenshots
+
+### Expanded
+![Expanded navigation](screenshots/expanded.png)
+
+### Collapsed
+![Collapsed navigation](screenshots/collapsed.png)
+
 ## Installation
 
 Install via the BB Community Marketplace, or install directly using the BB CLI:
